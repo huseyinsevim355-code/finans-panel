@@ -1,18 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Finans Yönetim Paneli</title>
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6C5CE7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Finans Paneli">
 <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+<title>Finans Yönetim Paneli</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -38,6 +40,14 @@
     --lime:#A3E635;
     --danger:#EF4444;
     --radius:18px;
+    /* sidebar her zaman koyu — SaaS panellerinde olduğu gibi tema değişse de sabit kalır */
+    --sidebar-bg:#14162B;
+    --sidebar-bg2:#191C36;
+    --sidebar-border:rgba(255,255,255,.07);
+    --sidebar-text:#C7C9DE;
+    --sidebar-text-dim:#8285A6;
+    --sidebar-hover-bg:rgba(255,255,255,.06);
+    --sidebar-active-text:#FFFFFF;
   }
   :root[data-theme="light"]{
     color-scheme: light;
@@ -52,8 +62,8 @@
   body{
     margin:0;
     background:
-      radial-gradient(ellipse 1100px 520px at 50% -12%, rgba(var(--gold-rgb),0.09), transparent 62%),
-      linear-gradient(180deg, #0D1526 0%, var(--bg) 46%);
+      radial-gradient(ellipse 1100px 520px at 50% -12%, rgba(var(--gold-rgb),0.07), transparent 62%),
+      var(--bg);
     background-attachment:fixed;
     color:var(--text);
     font-family:'Inter',sans-serif;
@@ -66,48 +76,48 @@
   /* sidebar tab navigation — left on desktop/tablet, bottom bar on mobile */
   .app-shell{display:flex;gap:18px;align-items:flex-start;}
   .sidebar{
-    width:220px;flex:none;position:sticky;top:20px;
-    background:rgba(var(--panel-rgb),.68);border:1px solid var(--border);border-radius:18px;
-    -webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
-    box-shadow:0 14px 34px -18px rgba(0,0,0,.55);
-    padding:10px;display:flex;flex-direction:column;gap:4px;
+    width:230px;flex:none;position:sticky;top:20px;
+    background:linear-gradient(175deg,var(--sidebar-bg2),var(--sidebar-bg) 40%);
+    border:1px solid var(--sidebar-border);border-radius:20px;
+    box-shadow:0 18px 40px -20px rgba(0,0,0,.5);
+    padding:14px 12px;display:flex;flex-direction:column;gap:3px;
     max-height:calc(100vh - 40px);overflow-y:auto;
     transition:width .2s ease;
   }
   .sidebar-collapse-btn{
     display:flex;align-items:center;justify-content:center;gap:8px;
-    padding:9px 12px;margin-bottom:4px;border-radius:10px;cursor:pointer;
-    color:var(--muted);font-size:11.5px;font-weight:600;border:1px dashed var(--border);
+    padding:9px 12px;margin-bottom:8px;border-radius:10px;cursor:pointer;
+    color:var(--sidebar-text-dim);font-size:11.5px;font-weight:600;border:1px dashed var(--sidebar-border);
     transition:background .16s ease,color .16s ease;user-select:none;
   }
-  .sidebar-collapse-btn:hover{background:var(--panel3);color:var(--text);}
+  .sidebar-collapse-btn:hover{background:var(--sidebar-hover-bg);color:var(--sidebar-active-text);}
   .sidebar-collapse-btn svg{width:14px;height:14px;flex:none;transition:transform .2s ease;}
-  .sidebar.collapsed{width:64px;}
+  .sidebar.collapsed{width:68px;}
   .sidebar.collapsed .nav-tab{justify-content:center;padding:11px;gap:0;}
   .sidebar.collapsed .st-label{display:none;}
   .sidebar.collapsed .sidebar-collapse-btn .cb-label{display:none;}
   .sidebar.collapsed .sidebar-collapse-btn svg{transform:rotate(180deg);}
   .nav-tab{
-    position:relative;display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;
-    cursor:pointer;font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:.01em;
+    position:relative;display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;
+    cursor:pointer;font-size:13px;font-weight:600;color:var(--sidebar-text);letter-spacing:.01em;
     border:1px solid transparent;transition:background .16s ease,color .16s ease,transform .1s ease;
     user-select:none;
   }
   .nav-tab .st-icon{
     flex:none;width:19px;height:19px;display:flex;align-items:center;justify-content:center;
-    transition:transform .16s ease,color .16s ease;color:var(--muted);
+    transition:transform .16s ease,color .16s ease;color:var(--sidebar-text-dim);
   }
   .nav-tab .st-icon svg{width:100%;height:100%;}
   .nav-tab .st-label{transition:color .16s ease;}
-  .nav-tab:hover{background:var(--panel3);color:var(--text);}
-  .nav-tab:hover .st-icon{color:var(--text);}
+  .nav-tab:hover{background:var(--sidebar-hover-bg);color:var(--sidebar-active-text);}
+  .nav-tab:hover .st-icon{color:var(--sidebar-active-text);}
   .nav-tab:active{transform:scale(.97);}
   .nav-tab.active{
-    background:rgba(var(--gold-rgb),.12);
-    color:var(--gold-light);font-weight:700;
-    box-shadow:inset 2.5px 0 0 var(--gold-light);
+    background:linear-gradient(135deg,var(--gold),var(--gold-light));
+    color:var(--sidebar-active-text);font-weight:700;
+    box-shadow:0 8px 18px -8px rgba(var(--gold-rgb),.6);
   }
-  .nav-tab.active .st-icon{color:var(--gold-light);}
+  .nav-tab.active .st-icon{color:var(--sidebar-active-text);}
   .tab-content{flex:1;min-width:0;}
   .tab-panel{display:none;}
   .tab-panel.active{display:block;animation:tabFadeIn .22s cubic-bezier(.16,1,.3,1);}
@@ -116,18 +126,18 @@
   /* fixed bottom navigation — mobile only */
   .bottom-nav{
     display:none;position:fixed;left:0;right:0;bottom:0;z-index:120;
-    background:rgba(var(--panel-rgb),.92);border-top:1px solid var(--border);
-    -webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
+    background:var(--sidebar-bg);border-top:1px solid var(--sidebar-border);
     padding:6px 2px calc(6px + env(safe-area-inset-bottom,0px));
     overflow-x:auto;-webkit-overflow-scrolling:touch;
   }
   .bottom-nav-inner{display:flex;min-width:max-content;width:100%;}
   .bottom-nav .nav-tab{
     flex:1 1 0;min-width:64px;flex-direction:column;gap:3px;padding:7px 6px;border-radius:12px;
-    box-shadow:none;
+    box-shadow:none;color:var(--sidebar-text);
   }
-  .bottom-nav .nav-tab.active{box-shadow:none;background:rgba(var(--gold-rgb),.14);}
-  .bottom-nav .nav-tab .st-icon{width:20px;height:20px;}
+  .bottom-nav .nav-tab .st-icon{width:20px;height:20px;color:var(--sidebar-text-dim);}
+  .bottom-nav .nav-tab.active{box-shadow:none;background:linear-gradient(135deg,var(--gold),var(--gold-light));}
+  .bottom-nav .nav-tab.active .st-icon{color:var(--sidebar-active-text);}
   .bottom-nav .nav-tab .st-label{font-size:9px;white-space:nowrap;font-weight:600;}
 
   @media (max-width:900px){
@@ -135,10 +145,16 @@
     .nav-tab{padding:10px 11px;font-size:12px;gap:9px;}
   }
   @media (max-width:767px){
-    .app-shell{display:block;}
-    .sidebar{display:none;}
-    body{padding-left:12px;padding-right:12px;padding-bottom:88px;}
-    .bottom-nav{display:block;}
+    .app-shell{display:flex;}
+    /* mobilde de sidebar solda kalır — daraltılmış ikon şeridi olarak sabit, alt bar yok */
+    .sidebar{
+      display:flex;width:60px;padding:10px 6px;position:sticky;top:10px;
+      max-height:calc(100vh - 20px);
+    }
+    .sidebar .st-label,.sidebar .cb-label,.sidebar-collapse-btn{display:none;}
+    .sidebar .nav-tab{justify-content:center;padding:11px 0;gap:0;}
+    body{padding-left:10px;padding-right:12px;padding-bottom:24px;}
+    .bottom-nav{display:none;}
   }
 
   header{
@@ -179,10 +195,10 @@
   button:active{transform:translateY(0) scale(.97);}
   button:disabled{opacity:.4;cursor:not-allowed;transform:none;}
   button.primary{
-    background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#221A00;border:none;font-weight:700;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#FFFFFF;border:none;font-weight:700;
     box-shadow:0 6px 18px -6px rgba(var(--gold-rgb),.55);
   }
-  button.primary:hover{filter:brightness(1.08);color:#221A00;background:linear-gradient(135deg,var(--gold-light),var(--gold));box-shadow:0 8px 22px -6px rgba(var(--gold-rgb),.7);}
+  button.primary:hover{filter:brightness(1.08);color:#FFFFFF;background:linear-gradient(135deg,var(--gold-light),var(--gold));box-shadow:0 8px 22px -6px rgba(var(--gold-rgb),.7);}
   button.danger{color:var(--coral);}
   button.danger:hover{background:rgba(239,68,68,.1);border-color:var(--coral);color:var(--coral);}
   button.small{padding:6px 12px;font-size:12.5px;border-radius:8px;}
@@ -233,14 +249,14 @@
   .quick-action-btn{
     position:fixed;right:24px;bottom:24px;z-index:110;
     width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
-    background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#221A00;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#FFFFFF;
     box-shadow:0 10px 28px -8px rgba(var(--gold-rgb),.55);
     display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:400;
     transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease;
   }
   .quick-action-btn:hover{transform:scale(1.06);box-shadow:0 14px 34px -8px rgba(var(--gold-rgb),.65);}
   .quick-action-btn.open{transform:rotate(45deg);}
-  @media (max-width:767px){.quick-action-btn{right:16px;bottom:84px;width:52px;height:52px;}}
+  @media (max-width:767px){.quick-action-btn{right:16px;bottom:20px;width:52px;height:52px;}}
   .quick-action-menu{
     position:fixed;right:24px;bottom:92px;z-index:109;
     display:flex;flex-direction:column;gap:8px;align-items:flex-end;
@@ -248,7 +264,7 @@
     transition:opacity .16s ease, transform .16s ease;
   }
   .quick-action-menu.open{opacity:1;pointer-events:auto;transform:translateY(0);}
-  @media (max-width:767px){.quick-action-menu{right:16px;bottom:150px;}}
+  @media (max-width:767px){.quick-action-menu{right:16px;bottom:86px;}}
   .quick-action-item{
     display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--border);
     border-radius:999px;padding:10px 18px 10px 14px;cursor:pointer;font-size:13px;font-weight:600;
@@ -597,7 +613,7 @@
   .entry-dot{width:8px;height:8px;border-radius:50%;opacity:.85;}
   .entry-btn{
     background:linear-gradient(135deg,var(--gold-light),var(--gold));
-    color:#1A1400;border:none;font-weight:700;font-size:14.5px;
+    color:#FFFFFF;border:none;font-weight:700;font-size:14.5px;
     padding:13px 32px;border-radius:12px;cursor:pointer;
     box-shadow:0 10px 30px rgba(var(--gold-rgb),.25);
     transition:transform .15s ease, box-shadow .15s ease;
@@ -622,7 +638,7 @@
   }
   .auth-error.show{display:block;}
   .auth-submit{
-    background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#1A1400;border:none;font-weight:700;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#FFFFFF;border:none;font-weight:700;
     font-size:14.5px;padding:13px 20px;border-radius:12px;cursor:pointer;margin-top:4px;
     transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
   }
@@ -670,8 +686,6 @@
     padding:14px 18px;margin-bottom:18px;font-size:13px;
   }
 </style>
-</head>
-<body>
 
 <div id="toastContainer"></div>
 
@@ -687,28 +701,18 @@
     <div class="entry-eyebrow">HOŞ GELDİN</div>
     <h1 class="entry-title" id="entryTitle">Finans Yönetim Paneli</h1>
     <div class="entry-subtitle" id="entrySubtitle">Kişisel Finans</div>
-
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="authTabLogin">Giriş Yap</div>
-      <div class="auth-tab" id="authTabRegister">Hesap Oluştur</div>
+    <div class="entry-dots">
+      <span class="entry-dot" style="background:var(--emerald);"></span>
+      <span class="entry-dot" style="background:var(--gold-light,var(--gold));"></span>
+      <span class="entry-dot" style="background:var(--sky);"></span>
+      <span class="entry-dot" style="background:var(--coral);"></span>
     </div>
-
     <div class="auth-error" id="authError"></div>
-
-    <form class="auth-form" id="loginForm">
-      <div class="auth-field"><label>E-posta</label><input type="email" id="loginEmail" autocomplete="username" required></div>
-      <div class="auth-field"><label>Şifre</label><input type="password" id="loginPassword" autocomplete="current-password" required></div>
-      <button type="submit" class="auth-submit" id="loginSubmitBtn">Giriş Yap →</button>
-    </form>
-
-    <form class="auth-form" id="registerForm" style="display:none;">
-      <div class="auth-field"><label>Ad (opsiyonel)</label><input type="text" id="registerName" autocomplete="name"></div>
-      <div class="auth-field"><label>E-posta</label><input type="email" id="registerEmail" autocomplete="username" required></div>
-      <div class="auth-field"><label>Şifre (en az 6 karakter)</label><input type="password" id="registerPassword" autocomplete="new-password" required minlength="6"></div>
-      <button type="submit" class="auth-submit" id="registerSubmitBtn">Hesap Oluştur →</button>
-    </form>
-
-    <div class="entry-note">Verilerin güvenli şekilde hesabına kaydedilir ve her cihazdan giriş yaptığında karşına çıkar.</div>
+    <div class="entry-note" id="noIdentityNote" style="display:none;">
+      Bu sayfayı görüntülemek için Claude hesabına giriş yapmış olman gerekiyor.
+    </div>
+    <button class="entry-btn" id="enterAppBtn" type="button" style="display:none;">Uygulamaya Gir →</button>
+    <div class="entry-note">Verilerin bu cihazda, sadece bu tarayıcıda saklanır.</div>
   </div>
 </div>
 
@@ -724,7 +728,7 @@
       <div class="month-badge">Bu ay: <b id="monthLabel">—</b></div>
       <button id="themeToggleBtn" class="icon-btn" title="Açık temaya geç"></button>
       <button id="settingsBtn" title="Ayarlar">Ayarlar</button>
-      <button id="exitAppBtn" title="Giriş ekranına dön">Çıkış</button>
+      <button id="closeSessionBtn" title="Oturumu kapat">Çıkış</button>
     </div>
   </header>
 
@@ -1169,6 +1173,7 @@ const ACCENTS = ['#D4AF37','#10B981','#FB7185','#A78BFA','#F59E0B','#2DD4BF','#F
 
 /* ---------- renk paletleri ---------- */
 const PALETTES = {
+  saas:    { name:'SaaS Menekşe',    primary:'#6C5CE7', light:'#8B7CF6', bg:'#0F0B1F', panel:'#171233', panel2:'#1E1840', panel3:'#261E52', border:'#352A6B' },
   indigo:  { name:'Indigo Fintech',  primary:'#6366F1', light:'#A5B4FC', bg:'#0B0E1A', panel:'#12162A', panel2:'#171C34', panel3:'#1D2340', border:'#2A3156' },
   zumrut:  { name:'Zümrüt Altın',    primary:'#C9A24A', light:'#7FCBA0', bg:'#0A1410', panel:'#0F1F19', panel2:'#132720', panel3:'#16281F', border:'#1E3A2F' },
   gold:    { name:'Altın Lacivert',  primary:'#D4AF37', light:'#F0D77B', bg:'#0A0F1C', panel:'#111A2C', panel2:'#17223A', panel3:'#1D2A45', border:'#28354F' },
@@ -1176,7 +1181,10 @@ const PALETTES = {
   copper:  { name:'Bakır Antrasit',  primary:'#E08A45', light:'#F5C08A', bg:'#160F0A', panel:'#1C140F', panel2:'#261A12', panel3:'#33231A', border:'#4A3524' },
   ocean:   { name:'Derin Okyanus',   primary:'#0EA5E9', light:'#7DD3FC', bg:'#071620', panel:'#0E1E2C', panel2:'#123044', panel3:'#18425C', border:'#285875' },
   violet:  { name:'Mor Gece',        primary:'#A855F7', light:'#D8B4FE', bg:'#12081E', panel:'#1A1030', panel2:'#241640', panel3:'#302056', border:'#4A3480' },
-  rose:    { name:'Bordo Gül',       primary:'#F43F5E', light:'#FDA4AF', bg:'#180A0F', panel:'#200E14', panel2:'#2E121B', panel3:'#3D1826', border:'#5C2438' }
+  rose:    { name:'Bordo Gül',       primary:'#F43F5E', light:'#FDA4AF', bg:'#180A0F', panel:'#200E14', panel2:'#2E121B', panel3:'#3D1826', border:'#5C2438' },
+  petrol:  { name:'Petrol Mavisi',   primary:'#0D9488', light:'#5EEAD4', bg:'#051514', panel:'#0B211F', panel2:'#0F2B28', panel3:'#153B37', border:'#215650' },
+  mauve:   { name:'Gül Kurusu',      primary:'#BE6E8F', light:'#E7A9C1', bg:'#1A0E14', panel:'#22131B', panel2:'#2E1A25', panel3:'#3D2230', border:'#5C3145' },
+  slate:   { name:'Kurumsal Gri',    primary:'#475569', light:'#94A3B8', bg:'#0C1016', panel:'#151A22', panel2:'#1B212B', panel3:'#232A37', border:'#334155' }
 };
 function hexToRgbStr(hex){
   const h = hex.replace('#','');
@@ -1255,8 +1263,8 @@ function defaultState(){
     budgets: {},  // {kategori: aylık limit}
     receivables: [], // {id, person, original, remaining, monthlyExpected} — başkasına verdiğim kredi/borç
     receivablePayments: [], // {id, receivableId, person, amount, date} — o kişiden alınan geri ödeme
-    palette: 'indigo', // renk paleti anahtarı
-    theme: 'dark', // 'dark' | 'light'
+    palette: 'saas', // renk paleti anahtarı
+    theme: 'light', // 'dark' | 'light'
     accounts: [], // {id, name, type, balance} — Nakit / Banka / Kredi Kartı
     recurring: [], // {id, name, amount, dayOfMonth, category}
     savingsGoal: { target: 0, current: 0, deadline: '' }
@@ -1296,56 +1304,29 @@ function showToast(message, type){
   }, 3600);
 }
 
-/* ---------- API istemcisi: gerçek backend + veritabanı ---------- */
-const FRIENDLY_FALLBACK_ERROR = 'İşlem tamamlanamadı. Lütfen tekrar deneyin.';
-async function apiFetch(path, options){
-  options = options || {};
-  const opts = Object.assign({ credentials:'include' }, options);
-  opts.headers = Object.assign({ 'Content-Type':'application/json' }, options.headers || {});
-  let res;
-  try{
-    res = await fetch(path, opts);
-  }catch(networkErr){
-    const e = new Error('Sunucuya ulaşılamadı. İnternet bağlantını kontrol edip tekrar dene.');
-    e.isNetwork = true;
-    throw e;
-  }
-  let data = null;
-  try{ data = await res.json(); }catch(e){ /* boş gövde olabilir */ }
-  if(!res.ok){
-    const e = new Error((data && data.error) ? data.error : FRIENDLY_FALLBACK_ERROR);
-    e.status = res.status;
-    throw e;
-  }
-  return data || {};
-}
-
-let currentUser = null;
+/* ---------- kalıcı veri: tarayıcının kendi deposu (localStorage) ---------- */
+/* Bu, kendi sunucunda/telefonunda çalışan bağımsız sürüm — Claude hesabı gerekmez,
+   veriler bu cihazın bu tarayıcısında saklanır. */
+let currentUser = { id: 'local' };
+const LOCAL_STATE_KEY = 'financeAppState_v1';
 
 async function checkSession(){
-  try{
-    const r = await apiFetch('/api/auth/me');
-    currentUser = r.user;
-    return true;
-  }catch(e){
-    currentUser = null;
-    return false;
-  }
+  return true;
 }
 
 async function loadState(){
   try{
-    const r = await apiFetch('/api/state');
-    state = r.state;
+    const raw = localStorage.getItem(LOCAL_STATE_KEY);
+    state = raw ? JSON.parse(raw) : defaultState();
     migrateState();
-    persistMode = 'api';
+    persistMode = 'local';
     persistOk = true;
   }catch(e){
     console.error('[loadState]', e);
     state = defaultState();
     persistMode = 'none';
     persistOk = false;
-    showToast('Veriler yüklenemedi. Bağlantını kontrol edip sayfayı yenile.', 'error');
+    showToast('Veriler yüklenemedi. Sayfayı yenilemeyi dene.', 'error');
   }
 }
 // eski kayıtlarda olmayan yeni alanları güvenli varsayılanlarla tamamlar
@@ -1353,23 +1334,23 @@ function migrateState(){
   if(!state.accounts) state.accounts = [];
   if(!state.recurring) state.recurring = [];
   if(!state.savingsGoal) state.savingsGoal = { target:0, current:0, deadline:'' };
-  if(!state.theme) state.theme = 'dark';
-  if(!state.palette) state.palette = 'indigo';
+  if(!state.theme) state.theme = 'light';
+  if(!state.palette) state.palette = 'saas';
 }
 let saveInFlight = null;
+let clockStarted = false;
 async function saveState(){
-  if(persistMode!=='api'){ updatePersistNotice(); return; }
-  // aynı anda birden fazla kayıt isteği yollamak yerine sıraya al
+  if(persistMode!=='local'){ updatePersistNotice(); return; }
   const run = async ()=>{
     try{
-      const r = await apiFetch('/api/state', { method:'PUT', body: JSON.stringify(state) });
-      state = r.state;
+      localStorage.setItem(LOCAL_STATE_KEY, JSON.stringify(state));
       persistOk = true;
       showToast('Değişiklikler kaydedildi.', 'success');
     }catch(e){
       console.error('[saveState]', e);
       persistOk = false;
-      showToast(e.message || 'İşlem kaydedilemedi. Lütfen tekrar deneyin.', 'error');
+      const msg = (e && e.name==='QuotaExceededError') ? 'Depolama kotası doldu.' : 'İşlem kaydedilemedi. Lütfen tekrar deneyin.';
+      showToast(msg, 'error');
     }
     updatePersistNotice();
   };
@@ -1381,7 +1362,7 @@ function updatePersistNotice(){
   if(!el) return;
   if(persistOk){ el.style.display='none'; return; }
   el.style.display='inline-block';
-  el.textContent = 'Son değişiklik kaydedilemedi — bağlantını kontrol et, verilerin tarayıcıda kaybolmaz ama sunucuya henüz yazılmadı.';
+  el.textContent = 'Son değişiklik kaydedilemedi — verilerin bu sekmede kaybolmaz ama henüz kalıcı olarak yazılmadı. Tekrar dene.';
 }
 
 /* ---------- genel modal (native confirm/alert bu ortamda engellenebiliyor) ---------- */
@@ -1420,13 +1401,13 @@ function openSettingsScreen(){
   const screen = document.getElementById('settingsScreen');
   document.getElementById('settingsAppTitle').value = state.appTitle||'';
   document.getElementById('settingsAppSubtitle').value = state.appSubtitle||'';
-  settingsSelectedPalette = state.palette || 'zumrut';
+  settingsSelectedPalette = state.palette || 'saas';
   renderPaletteGrid();
   screen.classList.add('open');
   window.scrollTo(0,0);
 }
 function closeSettingsScreen(){
-  applyPalette(state.palette||'gold'); // kaydedilmemiş önizlemeyi geri al
+  applyPalette(state.palette||'saas'); // kaydedilmemiş önizlemeyi geri al
   document.getElementById('settingsScreen').classList.remove('open');
 }
 function renderPaletteGrid(){
@@ -1442,11 +1423,16 @@ function renderPaletteGrid(){
     `;
   }).join('');
   grid.querySelectorAll('.palette-swatch').forEach(sw=>{
-    sw.addEventListener('click', ()=>{
+    sw.addEventListener('click', async ()=>{
       grid.querySelectorAll('.palette-swatch').forEach(s=>s.classList.remove('active'));
       sw.classList.add('active');
       settingsSelectedPalette = sw.dataset.palette;
       applyPalette(settingsSelectedPalette); // anında önizleme
+      // renk seçimi anında kalıcı olarak kaydedilir — ayrı bir "Kaydet" adımına gerek yok,
+      // "Geri" ile çıkıldığında seçimin sessizce eski haline dönmesini önler
+      state.palette = settingsSelectedPalette;
+      renderDonut();
+      await saveState();
     });
   });
 }
@@ -2235,7 +2221,7 @@ function renderDonut(){
     <svg viewBox="0 0 220 220" style="width:200px;height:200px;flex:none;">
       ${paths}
       <text x="110" y="105" text-anchor="middle" fill="#8B96AD" font-size="9" font-family="JetBrains Mono, monospace">TOPLAM</text>
-      <text id="donutTotalText" x="110" y="122" text-anchor="middle" fill="${PALETTES[state.palette||'gold'].light}" font-size="13" font-weight="700" font-family="Space Grotesk, sans-serif">${fmtMoney(total)}</text>
+      <text id="donutTotalText" x="110" y="122" text-anchor="middle" fill="${PALETTES[state.palette||'saas'].light}" font-size="13" font-weight="700" font-family="Space Grotesk, sans-serif">${fmtMoney(total)}</text>
     </svg>
     <div class="legend">${legend}</div>
   `;
@@ -3212,15 +3198,20 @@ function renderAccounts(){
     });
   });
 }
-document.getElementById('addAccountBtn').addEventListener('click', async ()=>{
+document.getElementById('addAccountBtn').addEventListener('click', async (e)=>{
+  const btn = e.currentTarget;
+  if(btn.disabled) return;
   const name = document.getElementById('accName').value.trim();
   const type = document.getElementById('accType').value;
   const balance = parseTL(document.getElementById('accBalance').value);
   if(!name){ showToast('Hesap adı boş bırakılamaz.', 'error'); return; }
-  state.accounts.push({ id: uid(), name, type, balance });
-  document.getElementById('accName').value='';
-  document.getElementById('accBalance').value='';
-  await saveState(); renderAll();
+  btn.disabled = true;
+  try{
+    state.accounts.push({ id: uid(), name, type, balance });
+    document.getElementById('accName').value='';
+    document.getElementById('accBalance').value='';
+    await saveState(); renderAll();
+  } finally { btn.disabled = false; }
 });
 
 /* ---------- Net Değer & Güvenle Harcanabilir ---------- */
@@ -3470,7 +3461,9 @@ document.getElementById('incomeToDebtBtn').addEventListener('click', async ()=>{
   if(wasPositive && d.remaining<=0.01) celebrateDebtPaid(d.creditor + ' borcu kapandı!', 'Bir borç daha bitti, devam 💪');
 });
 
-document.getElementById('addDebtBtn').addEventListener('click', async ()=>{
+document.getElementById('addDebtBtn').addEventListener('click', async (e)=>{
+  const btn = e.currentTarget;
+  if(btn.disabled) return;
   const creditor = document.getElementById('debtCreditor').value.trim();
   const remaining = Math.max(0, parseTL(document.getElementById('debtRemaining').value));
   const minPay = Math.max(0, parseTL(document.getElementById('debtMinPay').value));
@@ -3479,19 +3472,24 @@ document.getElementById('addDebtBtn').addEventListener('click', async ()=>{
   const totalInstallments = Math.max(0, parseInt(document.getElementById('debtTotalInstallments').value)||0);
   if(!creditor){ showToast('Kime borçlu olduğunu yazmalısın.', 'error'); return; }
   if(remaining<=0){ showToast('Borç tutarı boş bırakılamaz ve negatif olamaz.', 'error'); return; }
-  state.debts.push({ id: uid(), creditor, original: remaining, remaining, minPay, rate, isLoan, totalInstallments, paidInstallments: 0 });
-  document.getElementById('debtCreditor').value='';
-  document.getElementById('debtRemaining').value='';
-  document.getElementById('debtMinPay').value='';
-  document.getElementById('debtRate').value='';
-  document.getElementById('debtTotalInstallments').value='';
-  await saveState(); renderAll();
+  btn.disabled = true;
+  try{
+    state.debts.push({ id: uid(), creditor, original: remaining, remaining, minPay, rate, isLoan, totalInstallments, paidInstallments: 0 });
+    document.getElementById('debtCreditor').value='';
+    document.getElementById('debtRemaining').value='';
+    document.getElementById('debtMinPay').value='';
+    document.getElementById('debtRate').value='';
+    document.getElementById('debtTotalInstallments').value='';
+    await saveState(); renderAll();
+  } finally { btn.disabled = false; }
 });
 document.getElementById('debtIsLoan').addEventListener('change', e=>{
   document.getElementById('loanInstallmentField').style.display = e.target.value==='1' ? 'flex' : 'none';
 });
 
-document.getElementById('addReceivableBtn').addEventListener('click', async ()=>{
+document.getElementById('addReceivableBtn').addEventListener('click', async (e)=>{
+  const btn = e.currentTarget;
+  if(btn.disabled) return;
   const person = document.getElementById('recPerson').value.trim();
   const amount = Math.max(0, parseTL(document.getElementById('recAmount').value));
   const monthly = Math.max(0, parseTL(document.getElementById('recMonthly').value));
@@ -3502,26 +3500,34 @@ document.getElementById('addReceivableBtn').addEventListener('click', async ()=>
   const knownDeficit = Math.max(0, parseTL(document.getElementById('recKnownDeficit').value));
   if(!person){ showToast('Kişi adını yazmalısın.', 'error'); return; }
   if(amount<=0){ showToast('Tutar boş bırakılamaz ve negatif olamaz.', 'error'); return; }
-  state.receivables.push({ id: uid(), person, original: amount, remaining: amount, monthlyExpected: monthly, rate, startDate, knownDeficit });
-  document.getElementById('recPerson').value='';
-  document.getElementById('recAmount').value='';
-  document.getElementById('recMonthly').value='';
-  document.getElementById('recRate').value='';
-  document.getElementById('recStartDate').value='';
-  document.getElementById('recKnownDeficit').value='';
-  await saveState(); renderAll();
+  btn.disabled = true;
+  try{
+    state.receivables.push({ id: uid(), person, original: amount, remaining: amount, monthlyExpected: monthly, rate, startDate, knownDeficit });
+    document.getElementById('recPerson').value='';
+    document.getElementById('recAmount').value='';
+    document.getElementById('recMonthly').value='';
+    document.getElementById('recRate').value='';
+    document.getElementById('recStartDate').value='';
+    document.getElementById('recKnownDeficit').value='';
+    await saveState(); renderAll();
+  } finally { btn.disabled = false; }
 });
 
-document.getElementById('addExpenseBtn').addEventListener('click', async ()=>{
+document.getElementById('addExpenseBtn').addEventListener('click', async (e)=>{
+  const btn = e.currentTarget;
+  if(btn.disabled) return;
   const category = document.getElementById('expenseCategory').value;
   const amount = Math.max(0, parseTL(document.getElementById('expenseAmount').value));
   const note = document.getElementById('expenseNote').value.trim();
   if(amount<=0){ showToast('Tutar boş bırakılamaz ve negatif olamaz.', 'error'); return; }
   if(!category){ showToast('Kategori seçmelisin.', 'error'); return; }
-  state.expenses.push({ id: uid(), category, amount, note, date: new Date().toLocaleDateString('tr-TR') });
-  document.getElementById('expenseAmount').value='';
-  document.getElementById('expenseNote').value='';
-  await saveState(); renderExpenses(); renderKPIs(); renderCalendar();
+  btn.disabled = true;
+  try{
+    state.expenses.push({ id: uid(), category, amount, note, date: new Date().toLocaleDateString('tr-TR') });
+    document.getElementById('expenseAmount').value='';
+    document.getElementById('expenseNote').value='';
+    await saveState(); renderExpenses(); renderKPIs(); renderCalendar();
+  } finally { btn.disabled = false; }
 });
 
 document.getElementById('toggleBudgetBtn').addEventListener('click', ()=>{
@@ -3555,6 +3561,14 @@ document.getElementById('tutanakViewBtn').addEventListener('click', ()=>{
 });
 document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
 document.getElementById('settingsBtn').addEventListener('click', openSettingsScreen);
+document.getElementById('closeSessionBtn').addEventListener('click', ()=>{
+  // gerçek bir şifreli oturum değil (kimlik Claude hesabınla otomatik geliyor) —
+  // bu buton sadece görünümü kapak ekranına döndürür; linki tekrar açtığında
+  // otomatik olarak yine kendi hesabınla açılır
+  showLoginScreen();
+  const enterBtn = document.getElementById('enterAppBtn');
+  if(enterBtn) enterBtn.style.display = 'inline-block';
+});
 document.getElementById('settingsBackBtn').addEventListener('click', closeSettingsScreen);
 document.getElementById('settingsSaveBtn').addEventListener('click', saveSettingsScreen);
 document.getElementById('calYearSelect').addEventListener('change', e=>{
@@ -3563,31 +3577,13 @@ document.getElementById('calYearSelect').addEventListener('change', e=>{
 });
 
 /* tab navigation — sidebar (desktop) + bottom nav (mobile) share .nav-tab */
-/* ---------- gerçek SPA yönlendirme (URL doğrudan yazıldığında / yenilendiğinde de çalışır) ---------- */
-const TAB_ROUTES = {
-  overview:'/dashboard', accounts:'/accounts', cashflow:'/cashflow', debts:'/debts',
-  receivables:'/receivables', expenses:'/expenses', calendar:'/calendar', data:'/data'
-};
-const ROUTE_TABS = Object.fromEntries(Object.entries(TAB_ROUTES).map(([k,v])=>[v,k]));
-
-function switchTab(panelKey, opts){
+function switchTab(panelKey){
   if(!document.querySelector(`.tab-panel[data-panel="${panelKey}"]`)) panelKey = 'overview';
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active', t.dataset.panel===panelKey));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.dataset.panel===panelKey));
   try{ localStorage.setItem('financeAppActiveTab', panelKey); }catch(e){}
   try{ window.scrollTo({top:0, behavior:'instant'}); }catch(e){}
-  if(!opts || !opts.skipPush){
-    const path = TAB_ROUTES[panelKey] || '/dashboard';
-    if(location.pathname !== path){
-      try{ history.pushState({tab:panelKey}, '', path); }catch(e){}
-    }
-  }
 }
-window.addEventListener('popstate', ()=>{
-  if(!currentUser) return;
-  const tab = ROUTE_TABS[location.pathname] || 'overview';
-  switchTab(tab, {skipPush:true});
-});
 document.querySelectorAll('.nav-tab').forEach(tab=>{
   tab.addEventListener('click', ()=> switchTab(tab.dataset.panel));
 });
@@ -3706,7 +3702,7 @@ function maybeShowImportBanner(){
       showToast('Verilerin hesabına aktarıldı.', 'success');
       banner.remove();
       renderAll();
-      applyPalette(state.palette||'indigo', state.theme||'dark');
+      applyPalette(state.palette||'saas', state.theme||'light');
       updateThemeToggleIcon();
     } else {
       btn.disabled = false; btn.textContent = 'Tekrar Dene';
@@ -3722,26 +3718,32 @@ function safeRender(fn, label){
 
 async function afterLogin(){
   await loadState();
-  applyPalette(state.palette || 'indigo', state.theme || 'dark');
+  applyPalette(state.palette || 'saas', state.theme || 'light');
   updateThemeToggleIcon();
   renderAll();
   document.getElementById('entryTitle').textContent = state.appTitle || 'Finans Yönetim Paneli';
   document.getElementById('entrySubtitle').textContent = state.appSubtitle || 'Kişisel Finans';
-  showApp();
+  showLoginScreen(); // kapak ekranını göster — "Uygulamaya Gir" denene kadar panel açılmaz
   maybeShowImportBanner();
-  tickClock(); setInterval(tickClock, 1000);
 
-  let initialTab = ROUTE_TABS[location.pathname];
-  if(!initialTab){
-    try{ initialTab = localStorage.getItem('financeAppActiveTab') || 'overview'; }catch(e){ initialTab = 'overview'; }
-  }
-  switchTab(initialTab, {skipPush:true});
-  try{ history.replaceState({tab:initialTab}, '', TAB_ROUTES[initialTab] || '/dashboard'); }catch(e){}
+  let initialTab = 'overview';
+  try{ initialTab = localStorage.getItem('financeAppActiveTab') || 'overview'; }catch(e){}
+  switchTab(initialTab);
 
   try{
     const savedCollapsed = localStorage.getItem('financeAppSidebarCollapsed');
     if(savedCollapsed === '1') setSidebarCollapsed(true);
   }catch(e){}
+
+  // kapak ekranı: kullanıcı "Uygulamaya Gir" demeden asıl panele geçilmez
+  const enterBtn = document.getElementById('enterAppBtn');
+  if(enterBtn){
+    enterBtn.style.display = 'inline-block';
+    enterBtn.onclick = ()=>{
+      showApp();
+      if(!clockStarted){ clockStarted = true; tickClock(); setInterval(tickClock, 1000); }
+    };
+  }
 }
 
 function setAuthError(msg){
@@ -3751,69 +3753,6 @@ function setAuthError(msg){
   el.textContent = msg;
   el.classList.add('show');
 }
-
-document.getElementById('authTabLogin').addEventListener('click', ()=>{
-  document.getElementById('authTabLogin').classList.add('active');
-  document.getElementById('authTabRegister').classList.remove('active');
-  document.getElementById('loginForm').style.display = 'flex';
-  document.getElementById('registerForm').style.display = 'none';
-  setAuthError(null);
-});
-document.getElementById('authTabRegister').addEventListener('click', ()=>{
-  document.getElementById('authTabRegister').classList.add('active');
-  document.getElementById('authTabLogin').classList.remove('active');
-  document.getElementById('registerForm').style.display = 'flex';
-  document.getElementById('loginForm').style.display = 'none';
-  setAuthError(null);
-});
-
-document.getElementById('loginForm').addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  setAuthError(null);
-  const btn = document.getElementById('loginSubmitBtn');
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  btn.disabled = true; btn.textContent = 'Giriş yapılıyor…';
-  try{
-    const r = await apiFetch('/api/auth/login', { method:'POST', body: JSON.stringify({ email, password }) });
-    currentUser = r.user;
-    await afterLogin();
-  }catch(err){
-    setAuthError(err.message || 'Giriş yapılamadı. Lütfen tekrar deneyin.');
-  } finally {
-    btn.disabled = false; btn.textContent = 'Giriş Yap →';
-  }
-});
-
-document.getElementById('registerForm').addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  setAuthError(null);
-  const btn = document.getElementById('registerSubmitBtn');
-  const name = document.getElementById('registerName').value.trim();
-  const email = document.getElementById('registerEmail').value.trim();
-  const password = document.getElementById('registerPassword').value;
-  btn.disabled = true; btn.textContent = 'Hesap oluşturuluyor…';
-  try{
-    const r = await apiFetch('/api/auth/register', { method:'POST', body: JSON.stringify({ name, email, password }) });
-    currentUser = r.user;
-    await afterLogin();
-  }catch(err){
-    setAuthError(err.message || 'Hesap oluşturulamadı. Lütfen tekrar deneyin.');
-  } finally {
-    btn.disabled = false; btn.textContent = 'Hesap Oluştur →';
-  }
-});
-
-document.getElementById('exitAppBtn').addEventListener('click', async ()=>{
-  showConfirmModal('Çıkış yapmak istediğine emin misin?', async ()=>{
-    try{ await apiFetch('/api/auth/logout', { method:'POST' }); }catch(e){}
-    currentUser = null;
-    state = null;
-    try{ history.pushState(null, '', '/'); }catch(e){}
-    showLoginScreen();
-    showToast('Çıkış yapıldı.', 'info');
-  });
-});
 
 /* ---------- global hata sınırı: beklenmeyen bir hata tüm sayfayı boşaltmasın ---------- */
 let lastGlobalErrorToast = 0;
@@ -3833,6 +3772,8 @@ window.addEventListener('unhandledrejection', (e)=> reportUnexpectedError(e.reas
   if(loggedIn){
     await afterLogin();
   } else {
+    const note = document.getElementById('noIdentityNote');
+    if(note) note.style.display = 'block';
     showLoginScreen();
   }
 })();
