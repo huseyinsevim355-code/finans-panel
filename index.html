@@ -884,6 +884,29 @@
     .sx-grab{display:block;}
   }
 
+  /* ---------- bildirim önerisi + ayarlar ---------- */
+  .nb-card{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;margin-bottom:16px;background:linear-gradient(120deg,rgba(var(--gold-rgb),.16),rgba(var(--gold-rgb),.05));border:1px solid rgba(var(--gold-rgb),.32);}
+  .nb-card .nb-ic{width:44px;height:44px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#fff;}
+  .nb-card .nb-ic svg{width:22px;height:22px;}
+  .nb-card .grow{flex:1;min-width:0;}
+  .nb-card b{display:block;font-size:14px;color:var(--text);}
+  .nb-card small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
+  .nb-card .primary{height:40px;padding:0 16px;border-radius:12px;font-weight:800;flex:none;}
+  .nb-card .nb-x{width:34px;height:34px;padding:0!important;border-radius:10px;flex:none;background:none!important;border:0!important;color:var(--muted);font-size:16px;box-shadow:none!important;}
+  .nf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px;align-items:end;}
+  .nf-row{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:520px;padding:12px 14px;border-radius:14px;background:var(--panel2);border:1px solid var(--border);margin-bottom:12px;}
+  .nf-row b{display:block;font-size:14px;} .nf-row small{display:block;font-size:12px;color:var(--muted);margin-top:2px;}
+  .nf-sw{width:52px;height:30px;border-radius:999px;padding:0!important;position:relative;flex:none;background:var(--panel3)!important;border:1px solid var(--border)!important;box-shadow:none!important;transform:none!important;}
+  .nf-sw::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:left .18s ease;}
+  .nf-sw[aria-checked="true"]{background:linear-gradient(135deg,var(--gold-light),var(--gold))!important;}
+  .nf-sw[aria-checked="true"]::after{left:25px;}
+  .nf-state{font-size:12.5px;color:var(--muted);margin-top:10px;max-width:520px;}
+  .nf-steps{max-width:520px;padding:14px;border-radius:16px;margin-bottom:12px;background:rgba(var(--gold-rgb),.07);border:1px solid rgba(var(--gold-rgb),.25);font-size:13.5px;line-height:1.5;}
+  .nf-steps p{margin:0 0 8px;} .nf-steps ol{margin:0 0 10px;padding-left:20px;} .nf-steps li{margin-bottom:4px;}
+  .nf-topic{font-family:ui-monospace,monospace;font-weight:800;font-size:13px;padding:9px 12px;border-radius:10px;background:var(--panel2);border:1px dashed var(--border);margin-bottom:10px;word-break:break-all;}
+  .nf-btns{display:flex;flex-wrap:wrap;gap:8px;} .nf-btns button,.nf-link{height:42px;border-radius:12px;font-weight:700;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;}
+  .nf-link{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#fff!important;text-decoration:none;}
+
   /* ---------- masaüstü görünümü (telefonda) + yakınlaştırma ---------- */
   .dzoom{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:140;display:flex;align-items:center;gap:4px;padding:5px;border-radius:999px;background:var(--panel);border:1px solid var(--border);box-shadow:0 12px 30px rgba(0,0,0,.35);}
   .dzoom button{min-width:44px;height:44px;border-radius:999px;border:0;background:var(--panel2);color:var(--text);font:800 20px 'Inter',sans-serif;padding:0 10px;transform:none!important;}
@@ -1015,6 +1038,19 @@
       </div>
 
       <div class="settings-section">
+        <div class="settings-section-title">Bildirimler</div>
+        <div class="nf-row"><div><b>Ödeme hatırlatması</b><small>Uygulamayı açmadan "Bu ay şu ödemelerin var" bildirimi gelir</small></div><button type="button" class="nf-sw" id="nfSwitch" role="switch" aria-checked="false" aria-label="Günlük ödeme hatırlatması"></button></div>
+        <div class="nf-grid">
+          <div class="field"><label for="nfFreq">Ne sıklıkla</label><select id="nfFreq"><option value="gunluk">Her gün</option><option value="haftalik">Haftada bir (Pazartesi)</option><option value="aylik">Ayda bir</option></select></div>
+          <div class="field" id="nfDayField" hidden><label for="nfDay">Ayın kaçında</label><select id="nfDay"></select></div>
+          <div class="field"><label for="nfTime">En erken saat</label><input type="time" id="nfTime" value="09:00"></div>
+          <button type="button" id="nfTest" style="height:46px;border-radius:12px;font-weight:700;align-self:end">Bildirimi dene</button>
+        </div>
+        <div class="nf-state" id="nfState"></div>
+        <div id="ntfyBox" style="margin-top:14px"></div>
+      </div>
+
+      <div class="settings-section">
         <div class="settings-section-title">Hesap</div>
         <div class="acc-grid">
           <div class="field"><label for="accName">Ad soyad</label><input type="text" id="accName" autocomplete="name"></div>
@@ -1129,6 +1165,7 @@
     </nav>
     <div class="tab-content">
       <div class="tab-panel active" data-panel="overview">
+        <div id="notifyBannerSlot"></div>
 
       <div class="kpi5-grid">
         <div class="kpi5-card">
@@ -1633,6 +1670,8 @@ function migrateState(){
 let saveInFlight = null;
 let clockStarted = false;
 async function saveState(){
+  try{ ozetPlanla(); }catch(e){}
+  try{ ntfyPlanla(); }catch(e){}
   if(persistMode!=='local'){ updatePersistNotice(); return; }
   const run = async ()=>{
     try{
@@ -4569,6 +4608,298 @@ document.addEventListener('click', e=>{
   const dbt = e.target.closest('[data-debt-open]'); if(dbt){ openDebtSheet(dbt.dataset.debtOpen); return; }
   const rc = e.target.closest('[data-rec-open]'); if(rc){ openRecSheet(rc.dataset.recOpen); return; }
 });
+
+/* ---------- günlük özet bildirimi: uygulama kapalıyken telefonun üstünden ---------- */
+const OZET_CACHE = 'finans-ozet';
+let ozetT = 0, ozetSyncTried = false;
+function ozetPlanla(){ clearTimeout(ozetT); ozetT = setTimeout(()=>{ ozetCalistir(false); }, 1200); }
+function bildirimIzni(){ try{ return ('Notification' in window) ? Notification.permission : 'unsupported'; }catch(e){ return 'unsupported'; } }
+async function ozetSW(){
+  if(!('serviceWorker' in navigator)) return null;
+  try{ const r = await navigator.serviceWorker.getRegistration(); if(r && r.active) return r; }catch(e){}
+  try{ return await Promise.race([navigator.serviceWorker.ready, new Promise(res=>setTimeout(()=>res(null), 4000))]); }catch(e){ return null; }
+}
+async function ozetCalistir(force){
+  if(ozetKapali()) return false;
+  let plan; try{ plan = ozetPlanUret(); }catch(e){ console.error('[ozet]', e); return false; }
+  plan.enabled = ozetAcik() && bildirimIzni()==='granted';
+  try{
+    if(!('caches' in window)) return false;
+    const c = await caches.open(OZET_CACHE);
+    await c.put(new URL('./__ozet.json', location.href).href, new Response(JSON.stringify(plan), {headers:{'Content-Type':'application/json'}}));
+  }catch(e){ return false; }
+  const reg = await ozetSW(); if(!reg || !reg.active) return false;
+  if(!ozetSyncTried && plan.enabled && 'periodicSync' in reg){
+    ozetSyncTried = true;
+    try{
+      const st = await navigator.permissions.query({name:'periodic-background-sync'});
+      if(st.state==='granted') await reg.periodicSync.register('gunluk-ozet', {minInterval: 4*60*60*1000});
+    }catch(e){}
+  }
+  if(plan.enabled || force) reg.active.postMessage({type:'ozet-goster', force: !!force});
+  return true;
+}
+async function ozetTest(){
+  if(bildirimIzni()==='unsupported'){ ozetToast('Bu tarayıcı bildirim desteklemiyor.'); return; }
+  if(bildirimIzni()==='denied'){ ozetToast('Bildirim izni kapalı. Telefon Ayarları → Uygulamalar → bu uygulama → Bildirimler\'den aç.'); return; }
+  if(bildirimIzni()!=='granted'){ const p = await Notification.requestPermission(); if(p!=='granted'){ ozetToast('Bildirim izni verilmedi.'); return; } }
+  const ok = await ozetCalistir(true);
+  ozetToast(ok ? 'Deneme bildirimi gönderildi — telefonun üstüne bak.' : 'Bildirim için uygulamayı telefona yüklenmiş hâliyle aç.');
+}
+
+const NOTIFY_KEY = 'financeAppNotify', NOTIFY_TIME_KEY = 'financeAppNotifyTime', NB_HIDE_KEY = 'financeAppNotifyBanner';
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function ozetToast(m){ try{ showToast(m, 'info'); }catch(e){} }
+function ozetKapali(){ return inFrame() || !isLoggedIn(); }
+function ozetAcik(){ return lsGet(NOTIFY_KEY)!=='0' && !ntfyOn(); }
+function ymdF(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function inMonthTr(dateStr, y, m){ const d = parseTrDate(dateStr); return !!d && d.year===y && d.month===m; }
+const NOTIFY_FREQ_KEY = 'financeAppNotifyFreq', NOTIFY_DAY_KEY = 'financeAppNotifyDay';
+function ozetSiklik(){ const v = lsGet(NOTIFY_FREQ_KEY); return (v==='haftalik'||v==='aylik') ? v : 'gunluk'; }
+function ozetAyGunu(){ const n = parseInt(lsGet(NOTIFY_DAY_KEY)||'1',10); return (n>=1 && n<=28) ? n : 1; }
+function ozetIcerik(d, genis){
+  const base = new Date(), nowY = base.getFullYear(), nowM = base.getMonth()+1;
+  const y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate(), same = (y===nowY && m===nowM);
+  const debts = state.debts.filter(x=>x.remaining>0.01 && x.minPay>0 && !(same && (state.payments||[]).some(p=>p.debtId===x.id && inMonthTr(p.date,y,m))));
+  const recs = (state.receivables||[]).map(r=>{
+    if(!(r.monthlyExpected>0) || recRemaining(r)<=0.01) return null;
+    const got = same ? (state.receivablePayments||[]).filter(p=>p.receivableId===r.id && inMonthTr(p.date,y,m)).reduce((s,p)=>s+p.amount,0) : 0;
+    const left = Math.min(r.monthlyExpected - got, recRemaining(r));
+    return left>0.01 ? {n:r.person, a:left} : null;
+  }).filter(Boolean);
+  const rec = state.recurring||[];
+  const todayR = rec.filter(rc=>+rc.dayOfMonth===day), tomR = rec.filter(rc=>+rc.dayOfMonth===day+1);
+  const monthR = genis ? rec.filter(rc=>+rc.dayOfMonth>day+1) : [];
+  if(!debts.length && !recs.length && !todayR.length && !tomR.length && !monthR.length) return null;
+  const lines = [];
+  todayR.forEach(rc=>lines.push('📌 Bugün: '+rc.name+' '+fmtMoney(rc.amount)));
+  tomR.forEach(rc=>lines.push('🗓 Yarın: '+rc.name+' '+fmtMoney(rc.amount)));
+  monthR.slice(0,2).forEach(rc=>lines.push('🗓 Ayın '+rc.dayOfMonth+"'i: "+rc.name+' '+fmtMoney(rc.amount)));
+  if(debts.length){
+    debts.slice(0,3).forEach(x=>lines.push('💳 '+x.creditor+' '+fmtMoney(x.minPay)));
+    if(debts.length>3) lines.push('+'+(debts.length-3)+' ödeme daha');
+    if(debts.length>1) lines.push('Toplam '+fmtMoney(debts.reduce((s,x)=>s+x.minPay,0)));
+  }
+  recs.slice(0,2).forEach(r=>lines.push('💰 '+r.n+"'den alacak "+fmtMoney(r.a)));
+  const title = todayR.length ? 'Bugün '+todayR[0].name+' ödemesi var 📌'
+    : debts.length ? 'Bu ay '+debts.length+' ödemen var 💳'
+    : tomR.length ? 'Yarın '+tomR[0].name+' ödemesi var 🗓'
+    : recs.length ? 'Bu ay '+recs.length+' alacağın var 💰'
+    : 'Bu ay düzenli ödemelerin var 🗓';
+  return { title, body: lines.join('\n') };
+}
+function ozetPlanUret(){
+  const days = {}, base = new Date(), freq = ozetSiklik(), ayGunu = ozetAyGunu();
+  for(let i=0;i<40;i++){
+    const d = new Date(base.getFullYear(), base.getMonth(), base.getDate()+i);
+    let key = null;
+    if(freq==='gunluk'){ if(i>=14) break; key = ymdF(d); }
+    else if(freq==='haftalik'){
+      const dow = (d.getDay()+6)%7; // Pazartesi=0
+      if(dow>2) continue; // Pazartesi–Çarşamba arası; telefon geciktirirse bir sonraki gün yine dener
+      const mon = new Date(d.getFullYear(), d.getMonth(), d.getDate()-dow); key = 'h'+ymdF(mon);
+    } else {
+      if(d.getDate()<ayGunu || d.getDate()>ayGunu+2) continue;
+      key = 'a'+d.getFullYear()+'-'+(d.getMonth()+1);
+    }
+    const c = ozetIcerik(d, freq!=='gunluk'); if(!c) continue;
+    days[ymdF(d)] = Object.assign(c, {key});
+  }
+  return { app:'finans', morning: lsGet(NOTIFY_TIME_KEY) || '09:00', url: new URL('./?uygulama=finans', location.href).href, days, at: Date.now() };
+}
+function renderNotifyBanner(){
+  const slot = document.getElementById('notifyBannerSlot'); if(!slot) return;
+  if(inFrame() || bildirimIzni()!=='default' || lsGet(NB_HIDE_KEY)){ slot.innerHTML = ''; return; }
+  slot.innerHTML = `<div class="nb-card"><span class="nb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></span><div class="grow"><b>Ödemelerin telefonun üstüne gelsin</b><small>Uygulamayı açmadan "Bu ay şu ödemelerin var" hatırlatması alırsın.</small></div><button type="button" class="primary" id="nbOn">Aç</button><button type="button" class="nb-x" id="nbX" aria-label="Kapat">✕</button></div>`;
+  slot.querySelector('#nbOn').onclick = async ()=>{
+    lsSet(NOTIFY_KEY,'1');
+    try{ const p = await Notification.requestPermission(); if(p==='granted'){ showToast('Bildirimler açıldı. Ödemelerin telefonun üstüne gelecek.', 'success'); ozetCalistir(false); } else showToast('Bildirim izni verilmedi.', 'info'); }catch(e){}
+    renderNotifyBanner(); syncNotifySettings();
+  };
+  slot.querySelector('#nbX').onclick = ()=>{ lsSet(NB_HIDE_KEY,'1'); renderNotifyBanner(); };
+}
+function syncNotifySettings(){
+  const sw = document.getElementById('nfSwitch'), tm = document.getElementById('nfTime'), st = document.getElementById('nfState'); if(!sw) return;
+  const perm = bildirimIzni(), on = ozetAcik() && perm==='granted';
+  sw.setAttribute('aria-checked', String(on));
+  if(tm) tm.value = lsGet(NOTIFY_TIME_KEY) || '09:00';
+  const fr = document.getElementById('nfFreq'), dy = document.getElementById('nfDay'), df = document.getElementById('nfDayField');
+  if(dy && !dy.options.length) for(let i=1;i<=28;i++) dy.add(new Option(i+'. gün', String(i)));
+  if(fr) fr.value = ozetSiklik(); if(dy) dy.value = String(ozetAyGunu()); if(df) df.hidden = ozetSiklik()!=='aylik';
+  const fq = {gunluk:'her gün', haftalik:'her Pazartesi', aylik:'her ayın '+ozetAyGunu()+'. günü'}[ozetSiklik()];
+  if(st) st.textContent = perm==='denied' ? 'Bildirim izni kapalı: Telefon Ayarları → Uygulamalar → Finans Paneli → Bildirimler\'den açabilirsin.'
+    : perm==='unsupported' ? 'Bu tarayıcı bildirim desteklemiyor.'
+    : on ? 'Açık · Bekleyen ödemen varsa '+fq+', bu saatten sonra bildirim gelir.' : 'Kapalı';
+}
+document.getElementById('nfSwitch').addEventListener('click', async ()=>{
+  const on = !(ozetAcik() && bildirimIzni()==='granted');
+  if(on){
+    lsSet(NOTIFY_KEY,'1');
+    if(bildirimIzni()==='default'){ try{ await Notification.requestPermission(); }catch(e){} }
+  } else lsSet(NOTIFY_KEY,'0');
+  syncNotifySettings(); renderNotifyBanner(); ozetCalistir(false); ntfyPlanla();
+});
+document.getElementById('nfTime').addEventListener('change', e=>{ lsSet(NOTIFY_TIME_KEY, e.target.value || '09:00'); syncNotifySettings(); ozetCalistir(false); ntfyPlanla(); });
+document.getElementById('nfFreq').addEventListener('change', e=>{ lsSet(NOTIFY_FREQ_KEY, e.target.value); syncNotifySettings(); ozetCalistir(false); ntfyPlanla(); });
+document.getElementById('nfDay').addEventListener('change', e=>{ lsSet(NOTIFY_DAY_KEY, e.target.value); syncNotifySettings(); ozetCalistir(false); ntfyPlanla(); });
+document.getElementById('nfTest').addEventListener('click', async ()=>{ await ozetTestOrnekli(); syncNotifySettings(); });
+async function ozetTestOrnekli(){
+  if(bildirimIzni()==='unsupported'){ ozetToast('Bu tarayıcı bildirim desteklemiyor.'); return; }
+  if(bildirimIzni()==='denied'){ ozetToast('Bildirim izni kapalı. Telefon Ayarları → Uygulamalar → Finans Paneli → Bildirimler\'den aç.'); return; }
+  if(bildirimIzni()==='default'){ try{ await Notification.requestPermission(); }catch(e){} }
+  if(bildirimIzni()!=='granted'){ ozetToast('Bildirim izni verilmedi.'); return; }
+  ozetCalistir(false);
+  const reg = await ozetSW(); if(!reg){ ozetToast('Bildirim için uygulamayı telefona yüklenmiş hâliyle aç.'); return; }
+  const c = ozetIcerik(new Date(), ozetSiklik()!=='gunluk');
+  if(c) reg.showNotification(c.title, { body:c.body, icon:'icon-192.png', badge:'badge-96.png', tag:'finans-ozet', renotify:true });
+  else reg.showNotification('Finans Paneli 💳', { body:'Bildirimler çalışıyor. Bekleyen ödemen olduğunda burada göreceksin.', icon:'icon-192.png', badge:'badge-96.png', tag:'finans-ozet', renotify:true });
+  ozetToast('Deneme bildirimi gönderildi — telefonun üstüne bak.');
+}
+document.getElementById('settingsBtn').addEventListener('click', syncNotifySettings);
+renderNotifyBanner();
+setTimeout(()=>{ try{ ozetCalistir(false); }catch(e){} }, 2500);
+/* ---------- ntfy: uygulama kapalıyken de tam saatinde telefon bildirimi ---------- */
+const NTFY_HOST = 'https://ntfy.sh', NTFY_APP = 'f';
+const NTFY_SENT_KEY = 'ntfySent.' + NTFY_APP, NTFY_ON_KEY = 'ntfyOn.' + NTFY_APP;
+function ntfyGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function ntfySet(k,v){ try{ if(v==null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} }
+function ntfyTopic(create){
+  let t = ntfyGet('ntfyTopic');
+  if(!t && create){
+    const a = new Uint8Array(16); (window.crypto||{}).getRandomValues ? crypto.getRandomValues(a) : a.forEach((_,i)=>a[i]=Math.random()*256|0);
+    t = 'hs-' + Array.from(a, b=>'abcdefghijkmnpqrstuvwxyz23456789'[b % 32]).join('');
+    ntfySet('ntfyTopic', t);
+  }
+  return t;
+}
+function ntfyOn(){ return ntfyGet(NTFY_ON_KEY)==='1' && !!ntfyTopic(false); }
+function ntfySubLink(){ return 'ntfy://ntfy.sh/' + ntfyTopic(true) + '?display=' + encodeURIComponent('Hatırlatmalarım'); }
+function ntfyLoad(){ try{ return JSON.parse(ntfyGet(NTFY_SENT_KEY)) || {}; }catch(e){ return {}; } }
+function ntfyHash(s){ let h = 5381; for(let i=0;i<s.length;i++) h = ((h<<5) + h + s.charCodeAt(i))>>>0; return h.toString(36); }
+function ntfySid(s){ return String(s).replace(/[^A-Za-z0-9_-]/g,'').slice(0,60); }
+function ntfyAt(dateObj, hhmm){ const p = String(hhmm||'09:00').split(':').map(Number); const d = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), p[0]||0, p[1]||0, 0); return Math.floor(d.getTime()/1000); }
+async function ntfyPost(body){
+  const r = await fetch(NTFY_HOST + '/', { method:'POST', body: JSON.stringify(body) });
+  if(!r.ok) throw new Error('ntfy ' + r.status);
+  return r;
+}
+async function ntfyDelete(sid){
+  const r = await fetch(NTFY_HOST + '/' + ntfyTopic(false) + '/' + sid, { method:'DELETE' });
+  if(!r.ok && r.status!==404) throw new Error('ntfy ' + r.status);
+}
+let ntfyBusy = false, ntfyAgain = false, ntfyT = 0;
+function ntfyPlanla(){ clearTimeout(ntfyT); ntfyT = setTimeout(()=>{ ntfySync(); }, 4000); }
+async function ntfySync(){
+  if(ntfyBusy){ ntfyAgain = true; return; }
+  const topic = ntfyTopic(false); if(!topic) return;
+  ntfyBusy = true;
+  try{
+    const now = Math.floor(Date.now()/1000), sent = ntfyLoad();
+    for(const k in sent) if(sent[k].at < now - 120) delete sent[k];
+    let want = [];
+    if(ntfyOn() && !ntfyKapali()){
+      try{ want = ntfyIstenen(now) || []; }catch(e){ console.error('[ntfy]', e); want = []; }
+      want = want.filter(w=>w.at > now + 20 && w.at < now + 71*3600);
+      // 3 gün açılmazsa son hatırlatma: "uygulamayı bir kez aç"
+      if(want.length){
+        let keepAt = now + 71*3600 - 300; const kd = new Date(keepAt*1000);
+        if(kd.getHours() >= 22) keepAt = ntfyAt(kd, '21:30');
+        else if(kd.getHours() < 8){ const pv = new Date(kd.getFullYear(), kd.getMonth(), kd.getDate()-1); keepAt = ntfyAt(pv, '21:30'); }
+        want.push({ sid:'keep', at: keepAt, title: ntfyAppAdi()+' seni bekliyor 🔔', message:'Hatırlatmaların devam etsin diye uygulamayı bir kez aç. Açtığında önümüzdeki 3 günün bildirimleri yeniden kurulur.', tags:['bell'], priority:3 });
+      }
+    }
+    const wanted = {}; want.forEach(w=>{ w.sid = ntfySid(NTFY_APP + '-' + w.sid); wanted[w.sid] = w; });
+    let ops = 0;
+    for(const sid in wanted){
+      const w = wanted[sid], h = ntfyHash([w.at, w.title, w.message, w.priority||3].join('|'));
+      if(sent[sid] && sent[sid].h===h) continue;
+      if(ops++ >= 40) break;
+      await ntfyPost({ topic, sequence_id: sid, title: w.title, message: w.message, tags: w.tags||[], priority: w.priority||3, delay: String(w.at), click: ntfyAppUrl(), icon: ntfyIconUrl() });
+      sent[sid] = { at: w.at, h }; ntfySet(NTFY_SENT_KEY, JSON.stringify(sent));
+      await new Promise(r=>setTimeout(r, 250));
+    }
+    for(const sid in sent){
+      if(wanted[sid]) continue;
+      if(ops++ >= 40) break;
+      try{ await ntfyDelete(sid); }catch(e){ throw e; }
+      delete sent[sid]; ntfySet(NTFY_SENT_KEY, JSON.stringify(sent));
+      await new Promise(r=>setTimeout(r, 250));
+    }
+    ntfySet('ntfyLastSync.' + NTFY_APP, String(Date.now()));
+  }catch(e){ console.warn('[ntfy] eşitleme sonra tekrar denenecek', e); }
+  finally{ ntfyBusy = false; if(ntfyAgain){ ntfyAgain = false; ntfyPlanla(); } }
+}
+async function ntfyTest(){
+  const topic = ntfyTopic(false); if(!topic){ ntfyMesaj('Önce ntfy\'yi bağla.'); return; }
+  try{
+    await ntfyPost({ topic, title: ntfyAppAdi()+' bağlantısı çalışıyor ✅', message:'Bu bildirimi gördüysen her şey hazır. Hatırlatmaların artık uygulama kapalıyken de gelecek.', tags:['white_check_mark'], priority:4, click: ntfyAppUrl(), icon: ntfyIconUrl() });
+    ntfyMesaj('Deneme gönderildi — birkaç saniye içinde telefonun üstüne gelmeli.');
+  }catch(e){ ntfyMesaj('Gönderilemedi. İnternet bağlantını kontrol et.'); }
+}
+function ntfyBagla(){ ntfyTopic(true); ntfySet(NTFY_ON_KEY, '1'); ntfySync().then(()=>ntfyTest()); }
+async function ntfyKapat(){ ntfySet(NTFY_ON_KEY, null); await ntfySync(); }
+function ntfyKopyala(){
+  const t = ntfyTopic(true);
+  const done = ()=>ntfyMesaj('Kanal adı kopyalandı: ' + t);
+  try{ navigator.clipboard.writeText(t).then(done, ()=>ntfyMesaj('Kanal adı: ' + t)); }catch(e){ ntfyMesaj('Kanal adı: ' + t); }
+}
+setInterval(()=>{ if(ntfyOn()) ntfySync(); }, 30*60*1000);
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible' && ntfyOn()) ntfyPlanla(); });
+setTimeout(()=>{ ntfySync(); }, 3000);
+
+function ntfyKapali(){ return inFrame() || !isLoggedIn(); }
+function ntfyAppAdi(){ return 'Finans Paneli'; }
+function ntfyAppUrl(){ return new URL('./?uygulama=finans', location.href).href; }
+function ntfyIconUrl(){ return new URL('./icon-192.png', location.href).href; }
+function ntfyMesaj(m){ try{ showToast(m, 'info'); }catch(e){} }
+function ntfyIstenen(now){
+  if(lsGet(NOTIFY_KEY)==='0') return [];
+  const out = [], plan = ozetPlanUret(), morning = lsGet(NOTIFY_TIME_KEY) || '09:00', seen = {};
+  Object.keys(plan.days).sort().forEach(k=>{
+    const it = plan.days[k], p = k.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2]), at = ntfyAt(d, morning);
+    if(at <= now + 20) return;               // bugünün saati geçtiyse
+    if(seen[it.key]) return; seen[it.key] = 1; // haftalık/aylıkta dönem başına tek bildirim
+    out.push({ sid:'oz-'+String(it.key).replace(/-/g,''), at, title: it.title, message: it.body, tags:['credit_card'], priority:3 });
+  });
+  if(ozetSiklik()!=='gunluk'){
+    const base = new Date(), ozetGun = {}; out.forEach(o=>{ ozetGun[new Date(o.at*1000).toDateString()] = 1; });
+    for(let i=0;i<4;i++){
+      const d = new Date(base.getFullYear(), base.getMonth(), base.getDate()+i);
+      if(ozetGun[d.toDateString()]) continue; // o gün zaten özet gidiyor, içinde yazıyor
+      (state.recurring||[]).filter(rc=>+rc.dayOfMonth===d.getDate()).forEach(rc=>{
+        out.push({ sid:'rc-'+rc.id+'-'+ymdF(d).replace(/-/g,''), at: ntfyAt(d, morning), title:'📌 Bugün '+rc.name+' ödemesi var', message: fmtMoney(rc.amount)+' · düzenli gider', tags:['pushpin'], priority:4 });
+      });
+    }
+  }
+  return out;
+}
+let ntfyKurAcik = false;
+function renderNtfyBox(){
+  const box = document.getElementById('ntfyBox'); if(!box) return;
+  if(inFrame()){ box.innerHTML = ''; return; }
+  if(ntfyOn()){
+    const last = +(lsGet('ntfyLastSync.f')||0);
+    box.innerHTML = `<div class="nf-row"><div><b>Telefon bildirimleri (ntfy): Açık ✓</b><small>${last ? 'Son güncelleme '+new Date(last).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})+' · ' : ''}Uygulama kapalıyken de seçtiğin saatte gelir. 3 günde bir uygulamayı açman yeterli.</small></div></div>
+      <div class="nf-grid"><button type="button" id="ntfyTestB" style="height:46px;border-radius:12px;font-weight:700">ntfy'yi dene</button><button type="button" id="ntfyOffB" style="height:46px;border-radius:12px;font-weight:700">Kapat</button></div>`;
+    box.querySelector('#ntfyTestB').onclick = ()=>ntfyTest();
+    box.querySelector('#ntfyOffB').onclick = async ()=>{ await ntfyKapat(); showToast('ntfy hatırlatmaları kapatıldı.', 'info'); renderNtfyBox(); syncNotifySettings(); };
+    return;
+  }
+  const ortak = !!ntfyTopic(false);
+  box.innerHTML = `<div class="nf-row"><div><b>Telefon bildirimleri (ntfy)</b><small>Uygulama kapalıyken de ödeme hatırlatmaları tam saatinde gelir</small></div><button type="button" class="primary" id="ntfyKurB" style="height:40px;padding:0 16px;border-radius:12px;font-weight:800">Kur</button></div>` +
+    (ntfyKurAcik ? `<div class="nf-steps">${ortak ? '<p><b>Arbodiem\'de ntfy\'ye zaten abone olduysan</b> sadece <b>Bağlandım</b>\'a bas, aynı kanal kullanılır.</p>' : ''}<ol>
+      <li><b>ntfy'de abone ol</b> butonuna bas, ntfy açılınca <b>Abone ol</b>'a dokun.</li>
+      <li>ntfy açılmazsa: <b>Kanal adını kopyala</b> → ntfy'de <b>+</b> → yapıştır → <b>Abone ol</b>.</li>
+      <li>Bitince <b>Bağlandım</b>'a bas.</li></ol>
+      <div class="nf-topic">${escapeHtml(ntfyTopic(true))}</div>
+      <div class="nf-btns"><a class="nf-link" href="${escapeHtml(ntfySubLink())}">ntfy'de abone ol</a><button type="button" id="ntfyCopyB">Kanal adını kopyala</button><button type="button" class="primary" id="ntfyDoneB">Bağlandım ✓</button></div></div>` : '');
+  box.querySelector('#ntfyKurB').onclick = ()=>{ ntfyKurAcik = true; ntfyTopic(true); renderNtfyBox(); };
+  const c = box.querySelector('#ntfyCopyB'); if(c) c.onclick = ()=>ntfyKopyala();
+  const dn = box.querySelector('#ntfyDoneB'); if(dn) dn.onclick = ()=>{ ntfyBagla(); ntfyKurAcik = false; showToast('Bağlandı! Birazdan ntfy\'den deneme bildirimi gelecek.', 'success'); renderNtfyBox(); syncNotifySettings(); };
+}
+document.getElementById('settingsBtn').addEventListener('click', renderNtfyBox);
+
 
 /* ---------- telefona yükleme (PWA) ---------- */
 let installEvt = null;
