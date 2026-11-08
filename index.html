@@ -4721,22 +4721,24 @@ function renderNotifyBanner(){
 }
 function syncNotifySettings(){
   const sw = document.getElementById('nfSwitch'), tm = document.getElementById('nfTime'), st = document.getElementById('nfState'); if(!sw) return;
-  const perm = bildirimIzni(), on = ozetAcik() && perm==='granted';
+  const perm = bildirimIzni(), viaNtfy = ntfyOn(), on = lsGet(NOTIFY_KEY)!=='0' && (viaNtfy || perm==='granted');
   sw.setAttribute('aria-checked', String(on));
   if(tm) tm.value = lsGet(NOTIFY_TIME_KEY) || '09:00';
   const fr = document.getElementById('nfFreq'), dy = document.getElementById('nfDay'), df = document.getElementById('nfDayField');
   if(dy && !dy.options.length) for(let i=1;i<=28;i++) dy.add(new Option(i+'. gün', String(i)));
   if(fr) fr.value = ozetSiklik(); if(dy) dy.value = String(ozetAyGunu()); if(df) df.hidden = ozetSiklik()!=='aylik';
   const fq = {gunluk:'her gün', haftalik:'her Pazartesi', aylik:'her ayın '+ozetAyGunu()+'. günü'}[ozetSiklik()];
-  if(st) st.textContent = perm==='denied' ? 'Bildirim izni kapalı: Telefon Ayarları → Uygulamalar → Finans Paneli → Bildirimler\'den açabilirsin.'
+  if(st) st.textContent = (on && viaNtfy) ? 'Açık · Bekleyen ödemen varsa '+fq+', bu saatte ntfy üzerinden bildirim gelir.'
+    : perm==='denied' ? 'Bildirim izni kapalı: Telefon Ayarları → Uygulamalar → Finans Paneli → Bildirimler\'den açabilirsin.'
     : perm==='unsupported' ? 'Bu tarayıcı bildirim desteklemiyor.'
     : on ? 'Açık · Bekleyen ödemen varsa '+fq+', bu saatten sonra bildirim gelir.' : 'Kapalı';
 }
 document.getElementById('nfSwitch').addEventListener('click', async ()=>{
-  const on = !(ozetAcik() && bildirimIzni()==='granted');
+  const now = lsGet(NOTIFY_KEY)!=='0' && (ntfyOn() || bildirimIzni()==='granted');
+  const on = !now;
   if(on){
     lsSet(NOTIFY_KEY,'1');
-    if(bildirimIzni()==='default'){ try{ await Notification.requestPermission(); }catch(e){} }
+    if(!ntfyOn() && bildirimIzni()==='default'){ try{ await Notification.requestPermission(); }catch(e){} }
   } else lsSet(NOTIFY_KEY,'0');
   syncNotifySettings(); renderNotifyBanner(); ozetCalistir(false); ntfyPlanla();
 });
